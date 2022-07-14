@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Bugs</h1>
+
+<div id="bugs">
+  <% @bugs.each do |bug| %>
+    <h3>Title: <%= bug.title %></h3>
+    <h3>Description: <%= bug.description %></h3>
+    <p> Screenshot: </p>
+    <img src= <%= bug.screenshot %> >
+    <p>
+      <%= link_to "Show this bug", bug %>
+    </p>
+    <% if current_user %>
+      <%= link_to 'Edit', edit_bug_path(bug) %></td>
+      <%= link_to 'Destroy', bug, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <% end %>
+    <hr>
+  <% end %>
+</div>
+
+
+<br>
+<% if current_user %>
+  <%= link_to "New bug", new_bug_path %>
+<% end %>

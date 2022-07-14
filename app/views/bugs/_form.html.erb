@@ -1,0 +1,71 @@
+<%= form_with(model: bug, local: true) do |form| %>
+  <% if bug.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(bug.errors.count, "error") %> prohibited this bug from being saved:</h2>
+
+      <ul>
+      <% bug.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :screenshot %>
+    <%= form.text_field :screenshot %>
+  </div>
+
+  <div class="field">
+    <%= form.label :deadline %>
+    <%= form.date_select :deadline %>
+  </div>
+
+  <div class="field">
+    <%= form.label :bug_type %>
+    <%= form.select :bug_type, [['Bug','bug'],['Feature','feature']] %>
+  </div>
+  
+  <div id='creater-of-bug'>   
+    <%= form.label :Bug_Creater %>
+    <% i2 = current_user.id %>
+    <% i3 = current_user.name %>
+    <%= form.select :user_id, [[i3, i2]] %> 
+  </div>
+
+  <script>
+    document.getElementById('creater-of-bug').style.display='none'
+  </script>
+
+
+  <br>
+
+  <div>
+    <%= form.label :This_bug_belongs_to %>
+    <%= form.select(:project_id, Project.all.pluck(:title, :id)) %> Project
+  </div>
+  <br>
+
+  <div>
+    <%= form.label :status %>
+    <%= form.select :status, [['New', 'New'], ['Started', 'Started'], ['Completed/Resolved', 'Completed']] %>
+  </div>
+  <br>
+
+  <h3><%="You are logged in as #{current_user.name} who is a #{current_user.user_type} user" %><br></h3>
+  <h3>This Bug will be created against your records</h3>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

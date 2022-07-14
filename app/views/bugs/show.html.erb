@@ -1,0 +1,46 @@
+<p id="notice"><%= notice %></p>
+
+<h3><%= "This Bug is created by #{@bug.user.name} who is a #{@bug.user.user_type} User" %></h3>
+<h3><%= "This Bug Belongs to #{@bug.project.title}" %></h3>
+
+<p>
+  <strong>Title:</strong>
+  <%= @bug.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @bug.description %>
+</p>
+
+<p>
+  <strong>Screenshot:</strong><br>
+  <img src= <%= @bug.screenshot %> >
+</p>
+
+<p>
+  <strong>Deadline:</strong>
+  <%= @bug.deadline %>
+</p>
+
+<p>
+  <strong>Bug type:</strong>
+  <%= @bug.bug_type %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <% if @bug.status == 'Completed' %>
+    <% if @bug.bug_type == 'bug' %>
+      <%= "Resolved" %>
+    <% else %>
+      <%= "Completed" %>
+    <% end %>
+  <% else %>
+    <%= @bug.status %>
+  <% end %>
+</p>
+
+<%= link_to 'Edit this bug', edit_bug_path(@bug) %><br>
+<%= link_to 'Go to bugs', bugs_path %><br>
+<%= link_to 'Go to projects', projects_path %><br>

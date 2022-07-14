@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @project.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @project.description %>
+</p>
+<br><br>
+
+<h2> This Project has following Bugs </h2>
+<% bugss = @project.bugs %><br>
+<hr>
+
+<div id="bugs">
+  <% bugss.each do |bug| %>
+    <h3>Title: <%= bug.title %></h3>
+    <h3>Description: <%= bug.description %></h3>
+    <p> Screenshot: </p>
+    <img src= <%= bug.screenshot %> >
+    <p>
+      <%= link_to "Show this bug", bug %>
+    </p>
+    <hr>
+  <% end %>
+</div>
+
+<%= link_to 'Edit', edit_project_path(@project) %> |
+<%= link_to 'Back', projects_path %>
