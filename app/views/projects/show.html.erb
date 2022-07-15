@@ -11,10 +11,20 @@
 </p>
 <br><br>
 
-<h2> This Project has following Bugs </h2>
-<% bugss = @project.bugs %><br>
-<hr>
 
+<h2>Following Users are working on this Project </h2>
+<% userss = @project.users.uniq %>
+<div>
+    <% userss.each do |u| %> 
+      <h3>Name: <%= u.name %></h3>
+      <h3>User_type: <%= u.user_type %></h3>
+      <hr>
+    <% end %>
+</div>
+
+<br>
+<h2> This Project has following Bugs </h2>
+<% bugss = @project.bugs %>
 <div id="bugs">
   <% bugss.each do |bug| %>
     <h3>Title: <%= bug.title %></h3>

@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Bugs</h1>
 
 <div id="bugs">
@@ -11,10 +9,6 @@
     <p>
       <%= link_to "Show this bug", bug %>
     </p>
-    <% if current_user %>
-      <%= link_to 'Edit', edit_bug_path(bug) %></td>
-      <%= link_to 'Destroy', bug, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-    <% end %>
     <hr>
   <% end %>
 </div>

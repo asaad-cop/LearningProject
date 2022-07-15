@@ -41,6 +41,11 @@
   <% end %>
 </p>
 
-<%= link_to 'Edit this bug', edit_bug_path(@bug) %><br>
+<% if current_user %>
+  <%= link_to 'Edit this bug', edit_bug_path(@bug) %><br>
+  <%= link_to 'Delete this bug', @bug, method: :delete, data: { confirm: 'Are you sure?' } %><br>
+<% end %>
+<br>
+
 <%= link_to 'Go to bugs', bugs_path %><br>
 <%= link_to 'Go to projects', projects_path %><br>
