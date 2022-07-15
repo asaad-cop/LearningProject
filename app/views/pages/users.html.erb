@@ -1,0 +1,25 @@
+<% if current_user.admin %>
+    <h1>Total users</h1>
+    <% @userss.each do |u| %> 
+        <h3>Name: <%= u.name %>
+            <% if u.admin %>
+                <%= '(Admin)' %>
+            <% end %>
+        </h3>
+
+        <h3>User_type: <%= u.user_type %></h3>
+        <% projs = u.projects.uniq %>
+        <% if projs.any? %>
+            <% n = 1 %>
+            <h3>Association with Projects: </h3>
+            <% projs.each do |p| %>
+                <%= "#{n}. #{p.title} " %><br>
+                <% n+=1 %>
+            <% end %> 
+            <br>
+        <% end %>
+        <hr>
+    <% end %>
+<% else %>
+    <h2>This page is only visible to admin user</h2>
+<% end %>

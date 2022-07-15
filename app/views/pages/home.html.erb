@@ -3,3 +3,9 @@
 
 <h2><%= link_to 'Click here to go to Bugs page', bugs_path %></h2>
 <h2><%= link_to 'Click here to go to Projects page', projects_path %></h2>
+
+<% if current_user and current_user.admin %>
+    <br>
+    <h1><%= "Hey Admin!" %></h1>
+    <h2><%= link_to 'View All users', users_path %></h2>
+<% end %>
