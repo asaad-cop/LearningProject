@@ -26,6 +26,12 @@
   <%= @bug.bug_type %>
 </p>
 
+
+<p>
+  <strong>Bug Fixer:</strong>
+  <%= User.find_by(id: @bug.fixer_id).name %>
+</p>
+
 <p>
   <strong>Status:</strong>
   <% if @bug.status == 'Completed' %>
