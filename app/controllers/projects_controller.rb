@@ -1,9 +1,27 @@
 class ProjectsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_project, only: %i[ show edit update destroy ]
 
   # GET /projects or /projects.json
   def index
-    @projects = Project.all
+    # @projects = Project.all
+    if current_user.user_type == 'developer'
+      @projects = current_user.projects.uniq
+    else
+      @projects = Project.all
+    end
+  end
+
+  def newuser
+    [params[:id2]].each do |i|
+      u = User.find_by(id: i)
+      @project.users.delete u
+      b = Bug.where(fixer_id: i)
+      b2 = b.where(project_id: @project.id)
+      b2.update_all(fixer_id: nil)
+    end
+
+    redirect_to project_url(@project)
   end
 
   # GET /projects/1 or /projects/1.json
@@ -23,6 +41,14 @@ class ProjectsController < ApplicationController
   # POST /projects or /projects.json
   def create
     @project = Project.new(project_params)
+    
+    params[:users].each do |user|
+      user[1].each do |i|
+        if not i == ""
+          @project.users << User.find_by(id: i)
+        end
+      end
+    end
 
     respond_to do |format|
       if @project.save
@@ -37,6 +63,12 @@ class ProjectsController < ApplicationController
 
   # PATCH/PUT /projects/1 or /projects/1.json
   def update
+    debugger
+    params[:users]["id"].each do |i|
+      if not i == ""
+        @project.users << User.find_by(id: i)
+      end
+    end
     respond_to do |format|
       if @project.update(project_params)
         format.html { redirect_to project_url(@project), notice: "Project was successfully updated." }
@@ -66,6 +98,6 @@ class ProjectsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def project_params
-      params.require(:project).permit(:title, :description)
+      params.require(:project).permit(:title, :description, :id)
     end
 end

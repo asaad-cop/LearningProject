@@ -15,6 +15,6 @@
 
 
 <br>
-<% if current_user %>
+<% if can? :create, Bug %>
   <%= link_to "New bug", new_bug_path %>
 <% end %>

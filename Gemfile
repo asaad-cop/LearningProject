@@ -62,3 +62,5 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'devise', '~> 4.2'
 gem 'carrierwave', '~> 2.0'
+gem 'cancancan'
+gem 'jquery-rails'

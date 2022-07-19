@@ -1,8 +1,18 @@
 <h1>This is HomePage</h1>
+<% if not current_user %>
+    <h3>Please login to view the content</h3>
+<% else %>
+    <h3><%="You are logged in as #{current_user.name} (#{current_user.user_type})" %></h3>
+<% end %>
 <br>
 
-<h2><%= link_to 'Click here to go to Bugs page', bugs_path %></h2>
+
+<% if can? :read, Bug %>
+    <h2><%= link_to 'Click here to go to Bugs page', bugs_path %></h2>
+<% end %>
+<% if can? :read, Project %>
 <h2><%= link_to 'Click here to go to Projects page', projects_path %></h2>
+<% end %>
 
 <% if current_user and current_user.admin %>
     <br>

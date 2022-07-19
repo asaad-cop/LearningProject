@@ -21,6 +21,15 @@
     <%= form.text_area :description %>
   </div>
 
+  <h2><%= "Add new user to #{@project.title} project" %></h2>
+  <% u = User.all %>
+  <%= fields_for(@project_user) do |ab| %>
+      <div class="field">
+        <%= ab.label "All Users" %><br/>
+        <%= collection_select(:users, :id, u, :id, :name, {}, {:multiple => true}) %>
+      </div>
+  <% end %>
+
   <div class="actions">
     <%= form.submit %>
   </div>

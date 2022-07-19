@@ -1,13 +1,24 @@
 class BugsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_bug, only: %i[ show edit update destroy ]
 
   # GET /bugs or /bugs.json
   def index
-    @bugs = Bug.all
+    # @bugs = Bug.all
+    if current_user
+      if current_user.user_type == 'developer'
+        @bugs = Bug.where(fixer_id: current_user.id)
+      elsif current_user.user_type == 'qa'
+        @bugs = Bug.where(user_id: current_user.id)
+      else
+        @bugs = Bug.all
+      end
+    end
   end
 
   # GET /bugs/1 or /bugs/1.json
   def show
+    @bug
   end
 
   # GET /bugs/new
@@ -17,11 +28,17 @@ class BugsController < ApplicationController
 
   # GET /bugs/1/edit
   def edit
+    @bug
   end
 
   # POST /bugs or /bugs.json
   def create
     @bug = Bug.new(bug_params)
+    @bug.user_id = current_user.id
+    p = @bug.project
+    i = @bug.fixer_id
+    p.users << User.find_by(id: i)
+    p.users << User.find_by(id: current_user.id)
 
     respond_to do |format|
       if @bug.save
@@ -38,6 +55,10 @@ class BugsController < ApplicationController
   def update
     respond_to do |format|
       if @bug.update(bug_params)
+        p = @bug.project
+        i = @bug.fixer_id
+        p.users << User.find_by(id: i)
+        p.users << User.find_by(id: current_user.id)
         format.html { redirect_to bug_url(@bug), notice: "Bug was successfully updated." }
         format.json { render :show, status: :ok, location: @bug }
       else

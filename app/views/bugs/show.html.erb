@@ -28,8 +28,12 @@
 
 
 <p>
-  <strong>Bug Fixer:</strong>
-  <%= User.find_by(id: @bug.fixer_id).name %>
+  <strong>Bug assigned to:</strong>
+  <% if not User.find_by(id: @bug.fixer_id).nil? %>
+    <%= User.find_by(id: @bug.fixer_id).name %>
+  <% else %>
+    <%= "None" %>
+  <% end %> 
 </p>
 
 <p>
@@ -45,11 +49,10 @@
   <% end %>
 </p>
 
-<% if current_user %>
+<% if can? :update, @bug %>
   <%= link_to 'Edit this bug', edit_bug_path(@bug) %><br>
+<% end %>
+<% if can? :destroy, @bug %>
   <%= link_to 'Delete this bug', @bug, method: :delete, data: { confirm: 'Are you sure?' } %><br>
 <% end %>
 <br>
-
-<%= link_to 'Go to bugs', bugs_path %><br>
-<%= link_to 'Go to projects', projects_path %><br>
