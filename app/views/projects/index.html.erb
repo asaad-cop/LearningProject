@@ -1,8 +1,20 @@
-<h1>Projects</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Projects page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
 
-<table>
+<div class="container">
+  <h2>Projects</h2>            
+  <table class="table table-bordered">
   <thead>
-    <tr>
+    <tr class="success">
       <th>Title</th>
       <th>Description</th>
       <th colspan="1"></th>
@@ -11,17 +23,19 @@
 
   <tbody>
     <% @projects.each do |project| %>
-      <tr>
+      <tr class="warning">
         <td><%= project.title %></td>
         <td><%= project.description %></td>
-        <td><%= link_to 'Show this project', project %></td>
+        <td><%= link_to 'Show', project, class: "btn btn-info"%>
       </tr>
     <% end %>
   </tbody>
-</table>
+  </table>
 
-<br>
+  <% if can? :create, Project  %>
+    <%= link_to 'Create a new Project', new_project_path, class: "btn btn-success" %>
+  <% end %>
+</div>
 
-<% if can? :create, Project  %>
-  <%= link_to 'New Project', new_project_path %>
-<% end %>
+</body>
+</html>

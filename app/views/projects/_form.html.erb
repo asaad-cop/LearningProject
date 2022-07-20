@@ -1,36 +1,57 @@
-<%= form_with(model: project, local: true) do |form| %>
-  <% if project.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Register page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
 
-      <ul>
-      <% project.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+<body>
+<div class="container">
+  <h2>Create new Project</h2>
+
+  <%= form_with(model: project, local: true) do |form| %>
+    <% if project.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+
+        <ul>
+        <% project.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :project_title %>
+      <%= form.text_field :title %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :description %>
+      <%= form.text_field :description %>
+    </div>
+
+    <h2><%= "Add users to this project" %></h2>
+    <% u = User.all - @project.users %>
+    <%= fields_for(@project_user) do |ab| %>
+      <div class="form-group">
+          <%= ab.label "Users" %><br/>
+          <%= collection_select(:users, :id, u, :id, :name, {}, {:multiple => true}) %>
+        </div>
+    <% end %>
+
+    <div class="actions">
+      <%= form.submit %>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :title %>
-    <%= form.text_field :title %>
-  </div>
+  <h3><%= link_to 'Back', projects_path %></h3>
+</div>
 
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_area :description %>
-  </div>
-
-  <h2><%= "Add new user to #{@project.title} project" %></h2>
-  <% u = User.all %>
-  <%= fields_for(@project_user) do |ab| %>
-      <div class="field">
-        <%= ab.label "All Users" %><br/>
-        <%= collection_select(:users, :id, u, :id, :name, {}, {:multiple => true}) %>
-      </div>
-  <% end %>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</body>
+</html>

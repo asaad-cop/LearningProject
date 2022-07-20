@@ -1,20 +1,44 @@
-<h1>Bugs</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Create new Bug</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
 
-<div id="bugs">
-  <% @bugs.each do |bug| %>
-    <h3>Title: <%= bug.title %></h3>
-    <h3>Description: <%= bug.description %></h3>
-    <p> Screenshot: </p>
-    <img src= <%= bug.screenshot %> >
-    <p>
-      <%= link_to "Show this bug", bug %>
-    </p>
-    <hr>
+<body>
+<div class="container">
+  <h1>Bugs</h1>
+  
+  <div id="bugs">
+    <% @bugs.each do |bug| %>
+
+      <div class="col-sm-6">
+        <h3>Title: <%= bug.title %></h3>
+        <h3>Description: <%= bug.description %></h3>
+        <% if bug.screenshot.blank? %>
+          <h3>This bug has no screenshot</h>
+          <img src= <%= bug.screenshot %>  class="media-object" style="width:300px;height:150px">
+        <% else %>
+          <p> Screenshot: </p>
+          <img src= <%= bug.screenshot %>  class="media-object" style="width:300px;height:200px">
+        <% end %>
+        <h4><%= link_to "Show this bug", bug %></h4>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="col-sm-8">
+  <% if can? :create, Bug %>
+    <%= link_to "New bug", new_bug_path, class: "btn btn-success" %>
   <% end %>
+  </div>
+  <br>
+
 </div>
 
-
-<br>
-<% if can? :create, Bug %>
-  <%= link_to "New bug", new_bug_path %>
-<% end %>
+</body>
+</html>

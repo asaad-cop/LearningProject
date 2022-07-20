@@ -6,9 +6,7 @@ class Ability
   def initialize(user)
     
     if not user.nil?
-      if user.admin?
-        can :manage, :all
-      elsif user.user_type == 'manager'
+      if user.user_type == 'manager'
         can :manage, :all
       elsif user.user_type == 'qa'
         can :destroy, Bug
@@ -20,6 +18,8 @@ class Ability
         can :read, Bug
         can :read, Project
       end
+    # else
+    #   can :read, Bug
     end
 
     # can :edit, Bug

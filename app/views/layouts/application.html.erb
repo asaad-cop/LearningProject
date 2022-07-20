@@ -1,27 +1,52 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>LearningProject</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<html lang="en">
+<head>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-  <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
 
-    <% if current_user %>
-      <%= link_to 'Go to bugs', bugs_path %><br>
-      <%= link_to 'Go to projects', projects_path %><br><br>
-      <%= button_to "logout", destroy_user_session_path, method: :delete %>
-    <% else %>
-      <%= link_to "Register", new_user_registration_path %>
-      <%= link_to "Login", new_user_session_path %>
-    <% end %>
-    
-    <%= yield %>
-  </body>
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <% if not current_user %>
+        <ul class="nav navbar-nav">
+          <li><h3><%= link_to 'Home', homepage_path %></h3></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><h3><%= link_to "Register", new_user_registration_path %></h3></li>
+          <li><h6>  | | | </h6></li>
+          <li><h3><%= link_to "Login", new_user_session_path %></h3></li>
+          <li><h6>  | | | </h6></li>
+        </ul>
+
+      <% else %>
+        <ul class="nav navbar-nav">
+          <li><h3><%= link_to 'Home', homepage_path %></h3></li>
+          <li><h6>  | | | </h6></li>
+          <li><h3><%= link_to 'Bugs', bugs_path %></h3></li>
+          <li><h6>  | | | </h6></li>
+          <li><h3><%= link_to 'Projects', projects_path %></h3></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><h3><%= link_to "logout", destroy_user_session_path, method: :delete %></h3></li>
+          <li><h6>  | | | </h6></li>
+        </ul>
+      <% end %>
+
+    </div>
+  </nav>
+
+  <%= yield %>
+  
+</body>
 </html>
+

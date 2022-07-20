@@ -41,12 +41,9 @@ class ProjectsController < ApplicationController
   # POST /projects or /projects.json
   def create
     @project = Project.new(project_params)
-    
-    params[:users].each do |user|
-      user[1].each do |i|
-        if not i == ""
-          @project.users << User.find_by(id: i)
-        end
+    params[:users]["id"].each do |i|
+      if not i == ""
+        @project.users << User.find_by(id: i)
       end
     end
 
@@ -63,7 +60,6 @@ class ProjectsController < ApplicationController
 
   # PATCH/PUT /projects/1 or /projects/1.json
   def update
-    debugger
     params[:users]["id"].each do |i|
       if not i == ""
         @project.users << User.find_by(id: i)

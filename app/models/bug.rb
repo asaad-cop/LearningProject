@@ -1,10 +1,10 @@
 class Bug < ApplicationRecord
-    belongs_to :project
+    belongs_to :project, optional: true
     validates :title, uniqueness: { scope: :project_id}
     validates :title, presence: true
     validates :status, presence: true
     validates :bug_type, presence: true
-    belongs_to :user
+    belongs_to :user, optional: true
     enum status: { New: 0, Started: 1, Completed: 2, Resolved: 3}
     mount_uploader :screenshot, FileUploader
     validate :upload_is_image

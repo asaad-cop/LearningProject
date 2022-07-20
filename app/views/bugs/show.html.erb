@@ -1,58 +1,82 @@
-<h3><%= "This Bug is created by #{@bug.user.name} who is a #{@bug.user.user_type} User" %></h3>
-<h3><%= "This Bug Belongs to #{@bug.project.title}" %></h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Create new Bug</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
 
-<p>
-  <strong>Title:</strong>
-  <%= @bug.title %>
-</p>
+<body>
+<div class="container">
 
-<p>
-  <strong>Description:</strong>
-  <%= @bug.description %>
-</p>
+  <h3><%= "This Bug is created by #{@bug.user.name} who is a #{@bug.user.user_type} User" %></h3>
+  <h3><%= "This Bug Belongs to #{@bug.project.title}" %></h3>
+  
+  <div class="col-sm-4">
+    <h3>
+      <strong>Title:</strong>
+      <%= @bug.title %>
+    </h3>
 
-<p>
-  <strong>Screenshot:</strong><br>
-  <img src= <%= @bug.screenshot %> >
-</p>
+    <h3>
+      <strong>Description:</strong>
+      <%= @bug.description %>
+    </h3>
 
-<p>
-  <strong>Deadline:</strong>
-  <%= @bug.deadline %>
-</p>
+    <p>
+      <strong>Screenshot:</strong><br>
+      <img src= <%= @bug.screenshot %> class="media-object" style="width:300px;height:200px" >
+    </p>
+  </div>
 
-<p>
-  <strong>Bug type:</strong>
-  <%= @bug.bug_type %>
-</p>
+  <div class="col-sm-4">
+
+    <h3>
+      <strong>Deadline:</strong>
+      <%= @bug.deadline %>
+    </h3>
+
+    <h3>
+      <strong>Bug type:</strong>
+      <%= @bug.bug_type %>
+    </h3>
 
 
-<p>
-  <strong>Bug assigned to:</strong>
-  <% if not User.find_by(id: @bug.fixer_id).nil? %>
-    <%= User.find_by(id: @bug.fixer_id).name %>
-  <% else %>
-    <%= "None" %>
-  <% end %> 
-</p>
+    <h3>
+      <strong>Bug assigned to:</strong>
+      <% if not User.find_by(id: @bug.fixer_id).nil? %>
+        <%= User.find_by(id: @bug.fixer_id).name %>
+      <% else %>
+        <%= "None" %>
+      <% end %> 
+    </h3>
 
-<p>
-  <strong>Status:</strong>
-  <% if @bug.status == 'Completed' %>
-    <% if @bug.bug_type == 'bug' %>
-      <%= "Resolved" %>
-    <% else %>
-      <%= "Completed" %>
+    <h3>
+      <strong>Status:</strong>
+      <% if @bug.status == 'Completed' %>
+        <% if @bug.bug_type == 'bug' %>
+          <%= "Resolved" %>
+        <% else %>
+          <%= "Completed" %>
+        <% end %>
+      <% else %>
+        <%= @bug.status %>
+      <% end %>
+    </h3>
+
+    <% if can? :update, @bug %>
+      <%= link_to 'Edit this bug', edit_bug_path(@bug), class: "btn btn-warning" %><br><br>
     <% end %>
-  <% else %>
-    <%= @bug.status %>
-  <% end %>
-</p>
+    <% if can? :destroy, @bug %>
+      <%= link_to 'Delete this bug', @bug, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %><br>
+    <% end %>
+    <br>
+  </div>
+</div>
 
-<% if can? :update, @bug %>
-  <%= link_to 'Edit this bug', edit_bug_path(@bug) %><br>
-<% end %>
-<% if can? :destroy, @bug %>
-  <%= link_to 'Delete this bug', @bug, method: :delete, data: { confirm: 'Are you sure?' } %><br>
-<% end %>
-<br>
+</body>
+</html>
+  

@@ -1,81 +1,99 @@
-<%= form_with(model: bug, local: true) do |form| %>
-  <% if bug.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(bug.errors.count, "error") %> prohibited this bug from being saved:</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Edit this Bug</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
 
-      <ul>
-      <% bug.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+<body>
+<div class="container">
+  <h2>Edit this Bug</h2>
+  
+  <%= form_with(model: bug, local: true) do |form| %>
+    <% if bug.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(bug.errors.count, "error") %> prohibited this bug from being saved:</h2>
+
+        <ul>
+        <% bug.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :title_of_Bug %>
+      <%= form.text_field :title %>
+    </div>
+
+    <div class="form-group">
+    <%= form.label :description %>
+      <%= form.text_field :description %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :screenshot %>
+      <%= form.file_field :screenshot %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :deadline %>
+      <%= form.date_select :deadline %>
+    </div>
+
+    <div class="form-group" id="bug_type">
+      <%= form.label :bug_type %>
+      <%= form.select :bug_type, [['Bug','bug'],['Feature','feature']] %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :This_bug_belongs_to %><br>
+      <%= form.select(:project_id, Project.all.pluck(:title, :id)) %> Project
+    </div>
+
+    <div class="form-group" data-target='bug'>
+      <%= form.label :status %>
+      <%= form.select :status, (Bug.statuses.keys - ['Completed']).map {|role| [role.titleize, role]}%>
+    </div>
+
+    <div class="form-group" data-target='feature'>
+      <%= form.label :status  %>
+      <%= form.select :status, (Bug.statuses.keys - ['Resolved']).map {|role| [role.titleize, role]}%>
+    </div>
+
+    <div>
+      <% developers = User.where(user_type: 'developer') %>
+      <%= form.label :Developer_who_will_work_on_this_bug %>
+      <%= form.select(:fixer_id, developers.all.pluck(:name, :id)) %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit %>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :title %>
-    <%= form.text_field :title %>
-  </div>
+  <script>
+    function toggleSelects() {
+      var value = $('#bug_type').find(":selected").text();
+      $('[data-target=bug]').toggle(value === 'Bug');
+      $('[data-target=bug] select').attr('disable', value !== 'Bug');
+      $('[data-target=feature]').toggle(value === 'Feature');
+      $('[data-target=feature] select').attr('disable', value !== 'Feature');
+    }
+    $('#bug_type').on('change', () => toggleSelects());
 
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_area :description %>
-  </div>
+    $(toggleSelects);
+  </script>
 
-  <div class="field">
-    <%= form.label :screenshot %>
-    <%= form.file_field :screenshot %>
-  </div>
+  <h3><%= link_to 'Back', bugs_path %></h3>
 
-  <div class="field">
-    <%= form.label :deadline %>
-    <%= form.date_select :deadline %>
-  </div>
 
-  <div class="field" id="bug_type">
-    <%= form.label :bug_type %>
-    <%= form.select :bug_type, [['Bug','bug'],['Feature','feature']] %>
-  </div>
-  <br>
+</div>
 
-  <div>
-    <%= form.label :This_bug_belongs_to %>
-    <%= form.select(:project_id, Project.all.pluck(:title, :id)) %> Project
-  </div>
-  <br>
-
-  <div class="field" data-target='bug'>
-    <%= form.label :status, class:"form-control" %>
-    <%= form.select :status, (Bug.statuses.keys - ['Completed']).map {|role| [role.titleize, role]}%>
-  </div>
-  <br>
-
-  <div class="field" data-target='feature'>
-    <%= form.label :status, class:"form-control" %>
-    <%= form.select :status, (Bug.statuses.keys - ['Resolved']).map {|role| [role.titleize, role]}%>
-  </div>
-  <br>
-
-  <div>
-    <% developers = User.where(user_type: 'developer') %>
-    <%= form.label :Developer_who_will_work_on_this_bug %>
-    <%= form.select(:fixer_id, developers.all.pluck(:name, :id)) %>
-  </div>
-  <br>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
-
-<script>
-  function toggleSelects() {
-    var value = $('#bug_type').find(":selected").text();
-    $('[data-target=bug]').toggle(value === 'Bug');
-    $('[data-target=bug] select').attr('disable', value !== 'Bug');
-    $('[data-target=feature]').toggle(value === 'Feature');
-    $('[data-target=feature] select').attr('disable', value !== 'Feature');
-  }
-  $('#bug_type').on('change', () => toggleSelects());
-
-  $(toggleSelects);
-</script>
+</body>
+</html>

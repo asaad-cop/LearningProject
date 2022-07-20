@@ -1,21 +1,79 @@
-<h1>This is HomePage</h1>
-<% if not current_user %>
+<html lang="en">
+<head>
+  <title>Home Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+<div class="jumbotron text-center">
+  <h1>This is HomePage</h1>
+  <p>Welcome to bug tracking application!</p>
+  <% if not current_user %>
     <h3>Please login to view the content</h3>
+  <% else %>
+    <h3><%="You are logged in as #{current_user.name} (#{current_user.user_type.capitalize()})" %></h3>
+  <% end %>
+<br> 
+</div>
+
+<% if current_user and not current_user.user_type == 'manager' %>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <% if can? :read, Bug %>
+                    <h3><%= link_to 'View Bugs', bugs_path %></h3>
+                    <p>Bugs page shows list of all bugs to a Manager</p>
+                    <p>QA user will only see the bugs he created</p>
+                    <p>Developers will only be able to see the bugs that are assigned to them</p>
+                <% end %>
+            </div>
+
+            <div class="col-sm-6">
+                <% if can? :read, Project %>
+                    <h3><%= link_to 'View Projects', projects_path %></h3>
+                    <p>Projects page shows list of all Projeccts to a Manager and QA</p>
+                    <p>Developers will only be able to see the project on which they are working</p>
+                <% end %>
+            </div>
+        </div>
+    </div>
 <% else %>
-    <h3><%="You are logged in as #{current_user.name} (#{current_user.user_type})" %></h3>
-<% end %>
-<br>
 
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <% if can? :read, User %>
+                    <h3><%= link_to 'View All users', users_path %></h3>
+                    <p>Users page show all the users along with the projects they are working at</p>
+                    <p>User page is only visible to managers</p>
+                <% end %>
+            </div>
 
-<% if can? :read, Bug %>
-    <h2><%= link_to 'Click here to go to Bugs page', bugs_path %></h2>
-<% end %>
-<% if can? :read, Project %>
-<h2><%= link_to 'Click here to go to Projects page', projects_path %></h2>
+            <div class="col-sm-4">
+                <% if can? :read, Bug %>
+                    <h3><%= link_to 'View Bugs', bugs_path %></h3>
+                    <p>Bugs page shows list of all bugs to a Manager</p>
+                    <p>QA user will only see the bugs he created</p>
+                    <p>Developers will only be able to see the bugs that are assigned to them</p>
+                <% end %>                
+            </div>
+
+            <div class="col-sm-4">
+                <% if can? :read, Project %>
+                    <h3><%= link_to 'View Projects', projects_path %></h3>
+                    <p>Projects page shows list of all Projeccts to a Manager and QA</p>
+                    <p>Developers will only be able to see the project on which they are working</p>
+                <% end %>
+            </div>
+        </div>
+    </div>
+
 <% end %>
 
-<% if current_user and current_user.admin %>
-    <br>
-    <h1><%= "Hey Admin!" %></h1>
-    <h2><%= link_to 'View All users', users_path %></h2>
-<% end %>
+</body>
+</html>

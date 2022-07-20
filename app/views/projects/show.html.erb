@@ -1,36 +1,63 @@
-<p>
-  <strong>Title:</strong>
-  <%= @project.title %>
-</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Projects page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
 
-<p>
-  <strong>Description:</strong>
-  <%= @project.description %>
-</p>
-<% if can? :edit, @project  %>
-  <%= link_to 'Edit project', edit_project_path(@project) %><br><br>
-<% end %>
-<% if can? :destroy, @project  %>
-  <%= link_to 'Delete project', @project, method: :delete, data: { confirm: 'Are you sure?' } %><br><br>
-<% end %>
-<br>
+<div class="container">
+  <h2>Projects</h2>
+  <h3>
+    <strong>Title:</strong>
+    <%= @project.title %>
+  </h3>
+  <h3>
+    <strong>Description:</strong>
+    <%= @project.description %>
+  </h3>
+  <% if can? :edit, @project  %>
+    <%= link_to 'Edit project', edit_project_path(@project), class: "btn btn-warning" %><br><br>
+  <% end %>
+  <% if can? :destroy, @project  %>
+    <%= link_to 'Delete project', @project, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %><br><br>
+  <% end %>
 
-<% userss = @project.users.uniq %>
-<% if userss.count > 0 %>
-  <h2>Following Users are working on this Project </h2>
-  <div>
-      <% userss.each do |u| %> 
-        <h3>Name: <%= u.name %></h3>
-        <h3>User_type: <%= u.user_type %></h3>
-        <% if can? :edit, @project  %>
-          <%= link_to "Remove this user", userdelete_path(@project.id, u.id) %>
-        <% end %>
-        <hr>
+  <% userss = @project.users.uniq %>
+  <% if userss.count > 0 %>
+    <h2>Following Users are working on this Project </h2>
+
+    <table class="table table-bordered">
+    <thead>
+      <tr class="success">
+        <th>Name</th>
+        <th>User type</th>
+        <th>Contact info</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+        <% userss.each do |u| %>
+        <tr class="warning">
+          <td><%= u.name %></td>
+          <td><%= u.user_type %></td>
+          <td><%= u.email %></td>
+          <% if can? :edit, @project  %>
+            <td><%= link_to "Remove this user", userdelete_path(@project.id, u.id), class: "btn btn-warning" %></td>
+          <% end %>
+        </tr>
       <% end %>
-  </div>
-<% end %>
+    </tbody>
+    </table>
+  <% end %>
 
-<br>
+
+
 <% if current_user %>
   <% if current_user.user_type == 'developer' %>
     <% bugs = Bug.where(fixer_id: current_user.id) %>
@@ -45,17 +72,25 @@
 <% end %>
 
 <% if bugss.count > 0 %>
-  <h2> This Project has following Bugs </h2>
+  <h2> This Project has following Bugs </h2> 
   <div id="bugs">
     <% bugss.each do |bug| %>
-      <h3>Title: <%= bug.title %></h3>
-      <h3>Description: <%= bug.description %></h3>
-      <p> Screenshot: </p>
-      <img src= <%= bug.screenshot %> >
-      <p>
-        <%= link_to "Show this bug", bug %>
-      </p>
-      <hr>
+      <div class="col-sm-6">
+        <h3>Title: <%= bug.title %></h3>
+        <h3>Description: <%= bug.description %></h3>
+        <p> Screenshot: </p>
+        <% if bug.screenshot.blank? %>
+          <h4>This bug has no screenshot</h4>
+        <% else %>
+          <img src= <%= bug.screenshot %>  class="media-object" style="width:280px;height:180px">
+        <% end %>
+        <h4><%= link_to "Show this bug", bug %></h4>
+      </div>
     <% end %>
   </div>
 <% end %>
+
+</div>
+
+</body>
+</html>
