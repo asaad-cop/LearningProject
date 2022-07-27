@@ -18,8 +18,6 @@ class Ability
         can :read, Bug
         can :read, Project
       end
-    # else
-    #   can :read, Bug
     end
 
     # can :edit, Bug

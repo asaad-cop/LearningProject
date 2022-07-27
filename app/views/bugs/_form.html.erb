@@ -46,24 +46,23 @@
       <%= form.date_select :deadline %>
     </div>
 
-    <div class="form-group" id="bug_type">
-      <%= form.label :bug_type %>
-      <%= form.select :bug_type, [['Bug','bug'],['Feature','feature']] %>
-    </div>
-
     <div class="form-group">
       <%= form.label :This_bug_belongs_to %><br>
       <%= form.select(:project_id, Project.all.pluck(:title, :id)) %> Project
     </div>
 
-    <div class="form-group" data-target='bug'>
-      <%= form.label :status %>
-      <%= form.select :status, (Bug.statuses.keys - ['Completed']).map {|role| [role.titleize, role]}%>
+    <div class="form-group">
+     <%= label :bug_type, 'Type: ' %>
+      <%= form.radio_button :bug_type, 'bug', checked: "checked" %>
+      <%= label :bug_type, 'Bug' %>
+      <%= form.radio_button :bug_type, 'feature' %>
+      <%= label :bug_type, 'feature' %>
     </div>
 
-    <div class="form-group" data-target='feature'>
-      <%= form.label :status  %>
-      <%= form.select :status, (Bug.statuses.keys - ['Resolved']).map {|role| [role.titleize, role]}%>
+    <div class="form-group">
+      <% bug_status = ['New', 'Started', 'Resolved'] %>
+      <%= form.label :status, 'Status:' %>
+      <%= form.select(:status, bug_status,{}) %>
     </div>
 
     <div>
@@ -80,17 +79,18 @@
     </div>
   <% end %>
 
-  <script>
-    function toggleSelects() {
-      var value = $('#bug_type').find(":selected").text();
-      $('[data-target=bug]').toggle(value === 'Bug');
-      $('[data-target=bug] select').attr('disable', value !== 'Bug');
-      $('[data-target=feature]').toggle(value === 'Feature');
-      $('[data-target=feature] select').attr('disable', value !== 'Feature');
-    }
-    $('#bug_type').on('change', () => toggleSelects());
-
-    $(toggleSelects);
+  <script >
+    $("input[name='bug[bug_type]']").change(function() {
+      console.log('inside chnage method')
+      var obj = $("select[name='bug[status]']")[0][2]
+      if (this.value==='bug') {
+        obj.text = "Resolved"
+        obj.value = "Resolved"
+      } else {
+        obj.text  = "Completed"
+        obj.value = "Completed"
+      }
+    })
   </script>
 
   <h3><%= link_to 'Back', bugs_path %></h3>

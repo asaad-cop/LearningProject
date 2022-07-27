@@ -73,21 +73,33 @@
 
 <% if bugss.count > 0 %>
   <h2> This Project has following Bugs </h2> 
-  <div id="bugs">
+  <table class="table table-bordered">
+    <thead>
+      <tr class="success">
+        <th>Title</th>
+        <th>Description</th>
+        <th>Screenshot</th>
+        <th>Type</th>
+        <th></th>
+      </tr>
+    </thead>
+  
+  <tbody>
     <% bugss.each do |bug| %>
-      <div class="col-sm-6">
-        <h3>Title: <%= bug.title %></h3>
-        <h3>Description: <%= bug.description %></h3>
-        <p> Screenshot: </p>
+      <tr class="warning">
+        <td><%= bug.title %></td>
+        <td><%= bug.description %></td>
         <% if bug.screenshot.blank? %>
-          <h4>This bug has no screenshot</h4>
+          <td>This bug has no screenshot</td>
         <% else %>
-          <img src= <%= bug.screenshot %>  class="media-object" style="width:280px;height:180px">
+          <td><%= bug.screenshot.to_s.split('/').last %></td>
         <% end %>
-        <h4><%= link_to "Show this bug", bug %></h4>
-      </div>
+        <td><%= bug.bug_type %></td>
+        <td><%= link_to 'Show', bug, class: "btn btn-info"%>
+      </tr>
     <% end %>
-  </div>
+  </tbody>
+  </table>
 <% end %>
 
 </div>

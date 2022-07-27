@@ -37,34 +37,55 @@
     </div>
 
     <div class="form-group">
-      <%= form.label :screenshot %>
-      <%= form.file_field :screenshot %>
+      <%= form.label :screenshot %><br>
+      <%= form.file_field :screenshot, type: "file", class: "vendor_logo_hide", name: "v_logo", id: 'Uploadfile' %>
+      <% imgg = @bug.screenshot.to_s.split('/').last %>
     </div>
+
+    <script>
+      $(document).ready(function() {
+        $("#Uploadfile").after("<span class='file_placeholder'><%= imgg %></span>");
+        $('#Uploadfile').change(function() {
+          $(".file_placeholder").empty(); 
+          $('#Uploadfile').removeClass('vendor_logo_hide');
+        });
+      });
+    </script>
+
+    <style>
+      .vendor_logo_hide {
+        display: inline !important;
+        color: transparent;
+        width: 99px;
+      }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
     <div class="form-group">
       <%= form.label :deadline %>
       <%= form.date_select :deadline %>
     </div>
 
-    <div class="form-group" id="bug_type">
-      <%= form.label :bug_type %>
-      <%= form.select :bug_type, [['Bug','bug'],['Feature','feature']] %>
+    <div class="form-group">
+     <%= label :bug_type, 'Type: ' %>
+      <%= form.radio_button :bug_type, 'bug', :selected => "selected" %>
+      <%= label :bug_type, 'Bug' %>
+      <%= form.radio_button :bug_type, 'feature' %>
+      <%= label :bug_type, 'feature' %>
     </div>
 
+    <div class="form-group">
+      <% bug_status = ['New', 'Started', 'Completed'] %>
+      <%= form.label :status, 'Status:' %>
+      <%= form.select(:status, bug_status,{}) %>
+    </div>
+
+  
     <div class="form-group">
       <%= form.label :This_bug_belongs_to %><br>
       <%= form.select(:project_id, Project.all.pluck(:title, :id)) %> Project
     </div>
 
-    <div class="form-group" data-target='bug'>
-      <%= form.label :status %>
-      <%= form.select :status, (Bug.statuses.keys - ['Completed']).map {|role| [role.titleize, role]}%>
-    </div>
-
-    <div class="form-group" data-target='feature'>
-      <%= form.label :status  %>
-      <%= form.select :status, (Bug.statuses.keys - ['Resolved']).map {|role| [role.titleize, role]}%>
-    </div>
 
     <div>
       <% developers = User.where(user_type: 'developer') %>
@@ -88,6 +109,18 @@
     $('#bug_type').on('change', () => toggleSelects());
 
     $(toggleSelects);
+  </script>
+
+  <script >
+    $("input[name='bug[bug_type]']").change(function() {
+      console.log('inside chnage method')
+      var obj = $("select[name='bug[status]']")[0][2]
+      if (this.value==='bug') {
+        obj.text = "Resolved"
+      } else {
+        obj.text  = "Completed"
+      }
+    })
   </script>
 
   <h3><%= link_to 'Back', bugs_path %></h3>

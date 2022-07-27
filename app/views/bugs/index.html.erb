@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Create new Bug</title>
+  <title>Bugs</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -12,31 +12,39 @@
 <body>
 <div class="container">
   <h1>Bugs</h1>
+  <table class="table table-bordered">
+    <thead>
+      <tr class="success">
+        <th>Title</th>
+        <th>Description</th>
+        <th>Screenshot</th>
+        <th>Type</th>
+        <th></th>
+      </tr>
+    </thead>
   
-  <div id="bugs">
+  <tbody>
     <% @bugs.each do |bug| %>
-
-      <div class="col-sm-6">
-        <h3>Title: <%= bug.title %></h3>
-        <h3>Description: <%= bug.description %></h3>
+      <tr class="warning">
+        <td><%= bug.title %></td>
+        <td><%= bug.description %></td>
         <% if bug.screenshot.blank? %>
-          <h3>This bug has no screenshot</h>
-          <img src= <%= bug.screenshot %>  class="media-object" style="width:300px;height:150px">
+          <td>This bug has no screenshot</td>
         <% else %>
-          <p> Screenshot: </p>
-          <img src= <%= bug.screenshot %>  class="media-object" style="width:300px;height:200px">
+          <td><%= bug.screenshot.to_s.split('/').last %></td>
         <% end %>
-        <h4><%= link_to "Show this bug", bug %></h4>
-      </div>
+        <td><%= bug.bug_type %></td>
+        <td><%= link_to 'Show', bug, class: "btn btn-info"%>
+      </tr>
     <% end %>
-  </div>
+  </tbody>
+  </table>
 
-  <div class="col-sm-8">
+  <div>
   <% if can? :create, Bug %>
-    <%= link_to "New bug", new_bug_path, class: "btn btn-success" %>
+    <%= link_to "Create New bug", new_bug_path, class: "btn btn-success" %>
   <% end %>
   </div>
-  <br>
 
 </div>
 
